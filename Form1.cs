@@ -20,7 +20,8 @@ namespace TicTacToe
         }
         private void Form1_Load(object sender, EventArgs e)
         {
-            int[] a = new int[100];
+            a.Text = "Score for x is:0";
+            b.Text = "Score for o is:0";
             foreach (Button btn in panel1.Controls.OfType<Button>())
             {
                 btn.Click += buttonClicked;
@@ -31,8 +32,7 @@ namespace TicTacToe
             Button btn = sender as Button;
             if  (btn.Text != "") return;
             btn.Text = isX ? "x" : "o";
-            isX = !isX;
-
+            
             Button[] buttons = panel1.Controls.OfType<Button>().ToArray();
 
             for (int i = buttons.Length; i >= 0; i--)
@@ -98,7 +98,19 @@ namespace TicTacToe
                 button7.Text = "";
                 button8.Text = "";
                 button9.Text = "";
+                gameOver = false;
+                if (isX)
+                {
+
+                    a.Text = "Score for x is:" + (int.Parse(a.Text.Substring(15)) + 1).ToString();
+                }
+                else
+                {
+                    b.Text = "Score for o is:" + (int.Parse(b.Text.Substring(15)) + 1).ToString();
+                }
+                isX = true;
             }
+            else isX = !isX;
         }
     }
 }
