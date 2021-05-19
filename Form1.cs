@@ -14,6 +14,9 @@ namespace TicTacToe
     {
         bool isX = true;
         bool gameOver = false;
+        bool tie = false;
+        int timesClicked = 0;
+        string won = "";
         public Form1()
         {
             InitializeComponent();
@@ -22,17 +25,19 @@ namespace TicTacToe
         {
             a.Text = "Score for x is:0";
             b.Text = "Score for o is:0";
+
             foreach (Button btn in panel1.Controls.OfType<Button>())
             {
                 btn.Click += buttonClicked;
             }
         }
-        private void buttonClicked(object sender, EventArgs e) 
+        private void buttonClicked(object sender, EventArgs e)
         {
             Button btn = sender as Button;
-            if  (btn.Text != "") return;
+            if (btn.Text != "") return;
             btn.Text = isX ? "x" : "o";
-            
+            timesClicked++;
+
             Button[] buttons = panel1.Controls.OfType<Button>().ToArray();
 
             for (int i = buttons.Length; i >= 0; i--)
@@ -41,35 +46,35 @@ namespace TicTacToe
                 {
                     if (buttons[0].Text != "" && buttons[0].Text == buttons[1].Text && buttons[0].Text == buttons[2].Text)
                     {
-                        MessageBox.Show(buttons[i].Text + " Won!");
+                        won = buttons[i].Text;
                         gameOver = true;
                     }
                     if (buttons[0].Text != "" && buttons[0].Text == buttons[4].Text && buttons[0].Text == buttons[8].Text)
                     {
-                        MessageBox.Show(buttons[i].Text + " Won!");
+                        won = buttons[i].Text;
                         gameOver = true;
                     }
                     if (buttons[0].Text != "" && buttons[0].Text == buttons[3].Text && buttons[0].Text == buttons[6].Text)
                     {
-                        MessageBox.Show(buttons[i].Text + " Won!");
+                        won = buttons[i].Text;
                         gameOver = true;
                     }
                 }
                 if (i == 4)
                 {
-                    if(buttons[4].Text != "" && buttons[4].Text == buttons[1].Text && buttons[4].Text == buttons[7].Text)
+                    if (buttons[4].Text != "" && buttons[4].Text == buttons[1].Text && buttons[4].Text == buttons[7].Text)
                     {
-                        MessageBox.Show(buttons[i].Text + " Won!");
+                        won = buttons[i].Text;
                         gameOver = true;
                     }
-                    if(buttons[4].Text != ""  && buttons[4].Text == buttons[3].Text && buttons[4].Text == buttons[5].Text)
+                    if (buttons[4].Text != "" && buttons[4].Text == buttons[3].Text && buttons[4].Text == buttons[5].Text)
                     {
-                        MessageBox.Show(buttons[i].Text + " Won!");
+                        won = buttons[i].Text;
                         gameOver = true;
                     }
                     if (buttons[4].Text != "" && buttons[4].Text == buttons[2].Text && buttons[4].Text == buttons[6].Text)
                     {
-                        MessageBox.Show(buttons[i].Text + " Won!");
+                        won = buttons[i].Text;
                         gameOver = true;
                     }
                 }
@@ -77,17 +82,22 @@ namespace TicTacToe
                 {
                     if (buttons[2].Text != "" && buttons[8].Text == buttons[5].Text && buttons[8].Text == buttons[2].Text)
                     {
-                        MessageBox.Show(buttons[i].Text + " Won!");
+                        won = buttons[i].Text;
                         gameOver = true;
                     }
                     if (buttons[8].Text != "" && buttons[8].Text == buttons[7].Text && buttons[8].Text == buttons[6].Text)
                     {
-                        MessageBox.Show(buttons[i].Text + " Won!");
+                        won = buttons[i].Text;
                         gameOver = true;
                     }
                 }
             }
-            if (gameOver)
+            if(timesClicked  == 9 && !gameOver)
+            {
+                tie = true;
+
+            }
+            if (gameOver ||  tie)
             {
                 button1.Text = "";
                 button2.Text = "";
@@ -98,17 +108,27 @@ namespace TicTacToe
                 button7.Text = "";
                 button8.Text = "";
                 button9.Text = "";
-                gameOver = false;
-                if (isX)
+                if (gameOver)
                 {
+                    if (isX)
+                    {
 
-                    a.Text = "Score for x is:" + (int.Parse(a.Text.Substring(15)) + 1).ToString();
+                        a.Text = "Score for x is:" + (int.Parse(a.Text.Substring(15)) + 1).ToString();
+                    }
+                    else
+                    {
+                        b.Text = "Score for o is:" + (int.Parse(b.Text.Substring(15)) + 1).ToString();
+                    }
+                    MessageBox.Show(won +  " Won!");
                 }
                 else
                 {
-                    b.Text = "Score for o is:" + (int.Parse(b.Text.Substring(15)) + 1).ToString();
+                    MessageBox.Show("Tied!");
                 }
                 isX = true;
+                gameOver = false;
+                tie = false;
+                timesClicked = 0;
             }
             else isX = !isX;
         }
